@@ -1,6 +1,7 @@
 //Module Dependencies 
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+const cTable = require('console.table');
 
 //Creates connection info for mysql database
 var connection = mysql.createConnection({
@@ -10,22 +11,33 @@ var connection = mysql.createConnection({
     password: "DexterAraquel22",
     database: "bamazon_db"
 }); 
-
+//Connect to database
 connection.connect(function (err) {
     if (err) throw err; 
     console.log("connected as id " + connection.threadId + "\n");
-
+    //Display Products for sale
     displayProducts();
 });
 
 
 //Function to display ids, names and prices of products for sale
 function displayProducts() {
-    console.log("View our inventory!\n");
+    console.log("Welcome to Bamazon!!!\n");
+
+    var tableItems = [];
     connection.query("SELECT * FROM products", function (err, res) {
         for (var i = 0; i < res.length; i++) {
-            console.log("Item ID: " + res[i].item_id + " Item: " + res[i].product_name + " Price: " + res[i].price)
+            tableItems.push(
+                {
+                ID: res[i].item_id,
+                Product_Name: res[i].product_name,
+                Department: res[i].department_name,
+                Price: res[i].price,
+                Quantity: res[i].stock_quantity
+                }
+            );
         }
-    })
-};
-
+        const table = cTable.getTable(tableItems);
+        console.log(table);
+    });
+}
