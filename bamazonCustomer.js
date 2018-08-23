@@ -71,11 +71,13 @@ function checkInventory(id, quantity) {
         var res = res[0];
         if(quantity > res.stock_quantity) {
             console.log("\nSorry, this item is temporarily out of stock.");
+            repeat();
         } else {
             //Log total of user's total if there are enough units available
             console.log("\nThe total for your order is: $" + (quantity * res.price) +
             "\nThank you! Come again!");
             updateInventory(id, res.stock_quantity, quantity);
+            repeat();
         } 
     });    
 }
@@ -87,3 +89,21 @@ function updateInventory(id, stock, quantity) {
     });
 }
 
+
+function repeat() {
+    inquirer.prompt([
+        {
+            type: "confirm",
+            message: "Would you like to place another order?",
+            name: "confirm",
+            default: true
+        }
+    ]).then(function(answer) {
+        if(answer.confirm) {
+            buyItems();
+        } else {
+            console.log("Thank you! Come again!");
+            connection.end();
+        }
+    });
+}
