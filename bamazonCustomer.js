@@ -75,7 +75,15 @@ function checkInventory(id, quantity) {
             //Log total of user's total if there are enough units available
             console.log("\nThe total for your order is: $" + (quantity * res.price) +
             "\nThank you! Come again!");
+            updateInventory(id, res.stock_quantity, quantity);
         } 
     });    
+}
+
+function updateInventory(id, stock, quantity) {
+    var newStock = stock - quantity;
+    connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?", [newStock, id], function(err) {
+        if(err) throw err;
+    });
 }
 
