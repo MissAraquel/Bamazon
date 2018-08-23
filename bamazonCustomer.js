@@ -57,6 +57,25 @@ function buyItems() {
             message:"How many would you like to purchase?"
         }
     ]).then(function(answer) {
+        var id = answer.itemID;
+        var quantity = answer.Quantity;
         console.log("\nYour order: " + JSON.stringify(answer));
+        checkInventory(id, quantity);
     });
 }
+
+//Checks inventory if there are enough units the user wants to purchase
+function checkInventory(id, quantity) {
+    connection.query("SELECT * FROM products WHERE item_id = ?", id, function(err, res) {
+        if (err) throw err;
+        var res = res[0];
+        if(quantity > res.stock_quantity) {
+            console.log("\nSorry, this item is temporarily out of stock.");
+        } else {
+            //Log total of user's total if there are enough units available
+            console.log("\nThe total for your order is: $" + (quantity * res.price) +
+            "\nThank you! Come again!");
+        } 
+    });    
+}
+
