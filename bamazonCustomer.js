@@ -39,5 +39,24 @@ function displayProducts() {
         }
         const table = cTable.getTable(tableItems);
         console.log(table);
+
+        buyItems();
+    });
+}
+
+function buyItems() {
+    inquirer.prompt([
+        {
+            type:"input",
+            name:"itemID",
+            message:"Enter the ID of the item you want to purchase"
+        },
+        {
+            type:"input",
+            name:"Quantity",
+            message:"How many would you like to purchase?"
+        }
+    ]).then(function(answer) {
+        console.log("\nYour order: " + JSON.stringify(answer));
     });
 }
