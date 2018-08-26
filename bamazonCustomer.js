@@ -75,7 +75,7 @@ function checkInventory(id, quantity) {
         } else {
             //Log total of user's total if there are enough units available
             console.log("\nThe total for your order is: $" + (quantity * res.price) +
-            "\nThank you! Come again!");
+            "\nThank you! Come again!\n");
             updateInventory(id, res.stock_quantity, quantity);
             repeat();
         } 
@@ -100,7 +100,7 @@ function repeat() {
         }
     ]).then(function(answer) {
         if(answer.confirm) {
-            buyItems();
+            displayProducts();
         } else {
             console.log("Thank you! Come again!");
             connection.end();
